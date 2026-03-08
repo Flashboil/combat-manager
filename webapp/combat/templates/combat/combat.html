@@ -1,0 +1,25 @@
+<h1>{{ encounter.name }}</h1>
+<h2>Round {{ encounter.round_number }}</h2>
+
+<h3>Turn {{ encounter.current_turn|add:1 }}</h3>
+
+<ol>
+{% for c in combatants %}
+    <li>
+        [{{ c.initiative }}] {{ c.character.name }} —
+        HP {{ c.character.current_hp }}/{{ c.character.max_hp }} —
+        AC {{ c.character.armor }}
+
+        <form method="post" action="{% url 'update_health' c.id %}">
+            {% csrf_token %}
+            <input type="number" name="change" placeholder="Enter HP change">
+            <button type="submit">Update Health</button>
+        </form>
+    </li>
+{% endfor %}
+</ol>
+
+<form method="post" action="{% url 'next_turn' encounter.id %}">
+    {% csrf_token %}
+    <button type="submit">Next Turn</button>
+</form>

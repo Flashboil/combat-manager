@@ -1,0 +1,21 @@
+<h1>Characters:</h1>
+
+{% block content %}
+
+<ul>
+    {% for character in characters %}
+        <li>
+        <b>{{ character.name }} - lvl {{ character.level }} 
+        AC: {{ character.armor }} 
+        HP: {{ character.current_hp }} / {{ character.max_hp }}</b>
+        </li>
+    {% endfor %}
+</ul>
+
+<form method = 'post'>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save</button>
+</form>
+
+{% endblock %}

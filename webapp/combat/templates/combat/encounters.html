@@ -1,0 +1,35 @@
+<h1>Encounters Management</h1>
+
+<h2>Create New Encounter</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ encounter_form.as_p }}
+    <button type="submit" name="create_encounter">Create Encounter</button>
+</form>
+
+<hr>
+
+<h2>Existing Encounters</h2>
+
+{% for encounter in encounters %}
+    <div style="border:1px solid #ccc; padding:10px; margin-bottom:10px;">
+        <h3>{{ encounter.name }} — Round {{ encounter.round_number }}</h3>
+        
+        <a href="{% url 'combat' encounter.id %}">Go to Combat</a>
+
+        <form method="post" style="margin-top:10px;">
+            {% csrf_token %}
+            {{ combatant_forms[encounter.id].as_p }}
+            <input type="hidden" name="encounter_id" value="{{ encounter.id }}">
+            <button type="submit" name="add_combatant">Add Combatant</button>
+        </form>
+
+        <ul>
+            {% for c in encounter.combatant_set.all %}
+                <li>{{ c.character.name }} — Initiative: {{ c.initiative }}</li>
+            {% empty %}
+                <li>No combatants yet.</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endfor %}
